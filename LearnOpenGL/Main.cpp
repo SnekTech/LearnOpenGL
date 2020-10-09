@@ -125,23 +125,39 @@ int main()
 		-0.5f, -0.5f, 0.0f, // bottom left
 		-0.5f, 0.5f, 0.0f // top left
 	};
+	float triangle1_vertices[] = {
+		-0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+	float triangle2_vertices[] = {
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f
+	};
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
 		1, 2, 3 // second triangle
 	};
 
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attribute(s)
-	glBindVertexArray(VAO);
+	unsigned int VAO1, VAO2, VBO1, VBO2;
+	glGenVertexArrays(1, &VAO1);
+	glGenVertexArrays(1, &VAO2);
+	glGenBuffers(1, &VBO1);
+	glGenBuffers(1, &VBO2);
+	// bind the Vertex Array Object 1 first, then bind and set vertex buffer(s), and then configure vertex attribute(s)
+	glBindVertexArray(VAO1);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle1_vertices), triangle1_vertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// bind VAO 2 and configure
+	glBindVertexArray(VAO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle2_vertices), triangle2_vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -155,11 +171,14 @@ int main()
 		glClearColor(0.2, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// draw our first triangle
+		// draw triangle1 using VAO1
+		glUseProgram(orangeShaderProgram);
+		glBindVertexArray(VAO1);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		// draw triangle2 using VAO2
 		glUseProgram(redShaderProgram);
-		glBindVertexArray(VAO);
-		// glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO2);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// glfw: swap buffers and poll IO events
 		// ---------------------------------------------
