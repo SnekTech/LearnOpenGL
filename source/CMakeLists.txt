@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # default language: C C++
-project(learnopengl)
+project(LearnOpenGL)
 
 set(DEPENDENCY_PATH C:\\Users\\syf\\Projects\\Dependencies)
 
