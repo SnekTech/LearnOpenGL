@@ -5,7 +5,7 @@ project(LearnOpenGL)
 
 set(DEPENDENCY_PATH C:\\Users\\syf\\Projects\\Dependencies)
 
-add_executable(main main.cpp glad.c)
+add_executable(main main.cpp glad.c shader.h)
 
 target_link_libraries(main PRIVATE 
                             ${DEPENDENCY_PATH}\\Libs\\glfw3.lib
